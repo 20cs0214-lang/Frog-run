@@ -1,0 +1,829 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    user-select:none;
+    -webkit-user-select:none;
+    touch-action:none;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:Arial,sans-serif;
+    background:#101b2e;
+}
+
+canvas{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    display:none;
+}
+
+button{
+    font-family:Arial,sans-serif;
+    border:0;
+    cursor:pointer;
+}
+
+
+/* =========================
+   LOBBY
+========================= */
+
+#lobby{
+    position:fixed;
+    z-index:20;
+    inset:0;
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            180deg,
+            #4dc9ed 0%,
+            #83df7b 65%,
+            #4da449 100%
+        );
+}
+
+
+.cloud{
+    position:absolute;
+
+    background:
+        rgba(255,255,255,.8);
+
+    border-radius:50px;
+
+    width:100px;
+    height:30px;
+}
+
+.cloud:before,
+.cloud:after{
+    content:"";
+
+    position:absolute;
+
+    background:inherit;
+
+    border-radius:50%;
+}
+
+.cloud:before{
+    width:45px;
+    height:45px;
+
+    left:15px;
+    top:-20px;
+}
+
+.cloud:after{
+    width:55px;
+    height:55px;
+
+    right:12px;
+    top:-27px;
+}
+
+.c1{
+    top:12%;
+    left:5%;
+    transform:scale(.8);
+}
+
+.c2{
+    top:20%;
+    right:4%;
+    transform:scale(.6);
+}
+
+.c3{
+    top:7%;
+    right:30%;
+    transform:scale(.45);
+}
+
+
+.mountain{
+    position:absolute;
+
+    bottom:130px;
+
+    width:0;
+    height:0;
+
+    border-left:160px solid transparent;
+    border-right:160px solid transparent;
+    border-bottom:230px solid rgba(54,128,92,.5);
+}
+
+.m1{
+    left:-90px;
+}
+
+.m2{
+    left:180px;
+    transform:scale(.8);
+}
+
+.m3{
+    right:-90px;
+    transform:scale(1.1);
+}
+
+
+.logo{
+    position:absolute;
+
+    top:28px;
+    left:0;
+    right:0;
+
+    text-align:center;
+
+    color:#fff;
+
+    font-size:42px;
+
+    font-weight:1000;
+
+    letter-spacing:2px;
+
+    text-shadow:
+        0 5px 0 #19702b,
+        0 8px 15px rgba(0,0,0,.3);
+}
+
+.logo span{
+    display:block;
+
+    font-size:16px;
+
+    letter-spacing:3px;
+
+    margin-top:4px;
+}
+
+
+#lobbyFrog{
+    position:absolute;
+
+    left:50%;
+    top:31%;
+
+    transform:
+        translateX(-50%);
+
+    font-size:100px;
+
+    filter:
+        drop-shadow(
+            0 15px 5px
+            rgba(0,0,0,.25)
+        );
+
+    animation:
+        frogIdle
+        1.5s
+        infinite
+        ease-in-out;
+}
+
+@keyframes frogIdle{
+
+    0%,100%{
+
+        transform:
+            translateX(-50%)
+            translateY(0)
+            rotate(-2deg);
+
+    }
+
+    50%{
+
+        transform:
+            translateX(-50%)
+            translateY(-13px)
+            rotate(2deg);
+
+    }
+
+}
+
+
+.profile{
+    position:absolute;
+
+    top:190px;
+
+    left:15px;
+    right:15px;
+
+    display:flex;
+
+    justify-content:center;
+}
+
+
+.profileBox{
+
+    background:
+        rgba(8,35,26,.85);
+
+    color:white;
+
+    padding:
+        9px 18px;
+
+    border-radius:18px;
+
+    text-align:center;
+
+    box-shadow:
+        0 7px 15px
+        rgba(0,0,0,.2);
+}
+
+
+.profileName{
+    font-weight:900;
+    font-size:18px;
+}
+
+.profileStats{
+    font-size:12px;
+
+    opacity:.9;
+
+    margin-top:4px;
+}
+
+
+.menu{
+
+    position:absolute;
+
+    left:15px;
+    right:15px;
+    bottom:18px;
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:10px;
+
+    max-width:500px;
+
+    margin:auto;
+}
+
+
+.menu button{
+
+    min-height:58px;
+
+    border-radius:17px;
+
+    color:white;
+
+    font-size:15px;
+
+    font-weight:900;
+
+    box-shadow:
+        0 6px 0
+        rgba(0,0,0,.25);
+}
+
+
+.play{
+
+    grid-column:
+        1/3;
+
+    background:#22c94b;
+
+    font-size:22px !important;
+
+    min-height:
+        65px !important;
+}
+
+.rank{
+    background:#f1a928;
+}
+
+.shop{
+    background:#d94b8c;
+}
+
+.profileBtn{
+    background:#6366e8;
+}
+
+.settings{
+    background:#3d536d;
+}
+
+
+/* =========================
+   HUD
+========================= */
+
+#hud,
+#controls,
+#backLobby{
+    display:none;
+}
+
+
+#hud{
+
+    position:fixed;
+
+    z-index:40;
+
+    top:8px;
+
+    left:8px;
+    right:8px;
+
+    color:#fff;
+
+    text-shadow:
+        2px 2px 3px #000;
+
+    pointer-events:none;
+}
+
+
+.top{
+
+    display:flex;
+
+    justify-content:
+        space-between;
+
+    font-weight:900;
+}
+
+
+.stats{
+
+    display:flex;
+
+    gap:6px;
+
+    margin-top:7px;
+
+    flex-wrap:wrap;
+}
+
+
+.stat{
+
+    background:
+        rgba(0,0,0,.4);
+
+    padding:
+        6px 9px;
+
+    border-radius:10px;
+
+    font-size:12px;
+}
+
+
+/* =========================
+   CONTROLES
+========================= */
+
+#controls{
+
+    position:fixed;
+
+    z-index:50;
+
+    left:0;
+    right:0;
+
+    bottom:18px;
+
+    height:85px;
+
+    pointer-events:none;
+}
+
+
+.control{
+
+    pointer-events:auto;
+
+    position:absolute;
+
+    width:75px;
+    height:75px;
+
+    border-radius:50%;
+
+    border:4px solid #fff;
+
+    color:#fff;
+
+    font-size:30px;
+
+    box-shadow:
+        0 6px 0
+        rgba(0,0,0,.3);
+}
+
+
+.control:active{
+
+    transform:
+        translateY(5px);
+}
+
+
+#jump{
+
+    right:20px;
+
+    background:#258cea;
+}
+
+
+#tongue{
+
+    left:20px;
+
+    background:#df3f7b;
+}
+
+
+#backLobby{
+
+    position:fixed;
+
+    z-index:55;
+
+    top:65px;
+    right:10px;
+
+    padding:
+        8px 12px;
+
+    border-radius:12px;
+
+    background:
+        rgba(0,0,0,.5);
+
+    color:white;
+
+    font-weight:bold;
+}
+
+
+/* =========================
+   MODALES
+========================= */
+
+.modal{
+
+    display:none;
+
+    position:fixed;
+
+    z-index:100;
+
+    inset:0;
+
+    background:
+        rgba(0,0,0,.6);
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+}
+
+
+.modalBox{
+
+    width:100%;
+
+    max-width:380px;
+
+    background:#10251c;
+
+    color:#fff;
+
+    border-radius:24px;
+
+    padding:24px;
+
+    box-shadow:
+        0 20px 50px
+        rgba(0,0,0,.5);
+}
+
+
+.modalTitle{
+
+    text-align:center;
+
+    font-size:28px;
+
+    font-weight:1000;
+
+    margin-bottom:20px;
+}
+
+
+.close{
+
+    width:100%;
+
+    padding:13px;
+
+    border-radius:13px;
+
+    margin-top:20px;
+
+    background:#3c5369;
+
+    color:white;
+
+    font-weight:900;
+}
+
+
+.rankRow{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:12px;
+
+    margin-bottom:7px;
+
+    background:#1b3a2a;
+
+    border-radius:12px;
+}
+
+
+.rankRow.me{
+
+    background:#266c42;
+
+    border:
+        2px solid #61e578;
+}
+
+
+.name{
+    font-weight:bold;
+}
+
+
+.score{
+
+    font-weight:900;
+
+    color:#ffd83d;
+}
+
+
+.input{
+
+    width:100%;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    border:0;
+
+    outline:0;
+
+    margin-bottom:10px;
+
+    font-size:16px;
+}
+
+
+.save{
+
+    width:100%;
+
+    padding:14px;
+
+    background:#3ed65a;
+
+    color:white;
+
+    border-radius:12px;
+
+    font-weight:900;
+}
+
+
+.shopText{
+
+    text-align:center;
+
+    line-height:1.8;
+}
+
+
+/* =========================
+   GAME OVER
+========================= */
+
+#gameOver{
+
+    display:none;
+
+    position:fixed;
+
+    z-index:100;
+
+    inset:0;
+
+    background:
+        rgba(0,0,0,.75);
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+}
+
+
+.gameOverBox{
+
+    width:100%;
+
+    max-width:380px;
+
+    background:#10251c;
+
+    color:white;
+
+    border-radius:25px;
+
+    padding:25px;
+
+    text-align:center;
+}
+
+
+.gameOverBox h1{
+
+    font-size:55px;
+
+    color:#7aef68;
+}
+
+
+.gameOverBox h2{
+
+    margin:
+        5px 0 20px;
+}
+
+
+.finalCoins{
+
+    margin-top:8px;
+}
+
+
+.bigButton{
+
+    width:100%;
+
+    margin-top:15px;
+
+    padding:15px;
+
+    border-radius:14px;
+
+    color:white;
+
+    background:#35cf53;
+
+    font-size:18px;
+
+    font-weight:900;
+}
+
+
+.revive{
+
+    background:#ffb51b;
+
+    box-shadow:
+        0 5px 0
+        #a96f00;
+}
+
+
+.secondary{
+
+    background:#3c5369;
+}
+
+
+#reviveStatus{
+
+    margin-top:12px;
+
+    color:#ffd84a;
+
+    font-size:13px;
+}
+
+
+/* =========================
+   CUENTA REGRESIVA
+========================= */
+
+#countdown{
+
+    display:none;
+
+    position:fixed;
+
+    z-index:90;
+
+    inset:0;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:white;
+
+    font-size:100px;
+
+    font-weight:1000;
+
+    text-shadow:
+        0 8px 20px #000;
+
+    pointer-events:none;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-height:650px){
+
+    .logo{
+        top:15px;
+        font-size:34px;
+    }
+
+    #lobbyFrog{
+        top:25%;
+        font-size:75px;
+    }
+
+    .profile{
+        top:145px;
+    }
+
+    .menu{
+        bottom:10px;
+    }
+
+    .menu button{
+        min-height:48px;
+    }
+
+}
+
+
+@media(min-width:700px){
+
+    .menu{
+        max-width:520px;
+    }
+
+}
