@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Frog Run</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div id="lobby">
+
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+
+    <div class="mountain m1"></div>
+    <div class="mountain m2"></div>
+    <div class="mountain m3"></div>
+
+    <div class="logo">
+        🐸 FROG RUN
+        <span>RUN • JUMP • SURVIVE</span>
+    </div>
+
+    <div id="lobbyFrog">🐸</div>
+
+    <div class="profile">
+        <div class="profileBox">
+            <div class="profileName" id="playerName">
+                Jugador
+            </div>
+
+            <div class="profileStats">
+                🏆 Récord:
+                <span id="lobbyBest">0</span>m
+                &nbsp;&nbsp;
+                🪙
+                <span id="lobbyCoins">0</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="menu">
+
+        <button class="play" onclick="startGame()">
+            ▶️ JUGAR
+        </button>
+
+        <button class="rank" onclick="openRanking()">
+            🏆 RANKING
+        </button>
+
+        <button class="shop" onclick="openShop()">
+            🛒 TIENDA
+        </button>
+
+        <button class="profileBtn" onclick="openProfile()">
+            👤 PERFIL
+        </button>
+
+        <button class="settings" onclick="openSettings()">
+            ⚙️ AJUSTES
+        </button>
+
+    </div>
+</div>
+
+
+<canvas id="game"></canvas>
+
+
+<div id="hud">
+
+    <div class="top">
+        <div>🐸 FROG RUN</div>
+
+        <div>
+            🏆 <span id="best">0</span>m
+        </div>
+    </div>
+
+    <div class="stats">
+
+        <div class="stat">
+            📏 <span id="distance">0</span>m
+        </div>
+
+        <div class="stat">
+            🪙 <span id="coins">0</span>
+        </div>
+
+        <div class="stat">
+            🪰 <span id="flies">0</span>
+        </div>
+
+        <div class="stat">
+            🌎 Zona <span id="zone">1</span>
+        </div>
+
+    </div>
+
+</div>
+
+
+<button id="backLobby" onclick="returnLobby()">
+    🏠 Lobby
+</button>
+
+
+<div id="controls">
+
+    <button class="control" id="tongue">
+        👅
+    </button>
+
+    <button class="control" id="jump">
+        🦘
+    </button>
+
+</div>
+
+
+<div id="countdown">
+    3
+</div>
+
+
+<!-- RANKING -->
+
+<div class="modal" id="rankingModal">
+
+    <div class="modalBox">
+
+        <div class="modalTitle">
+            🏆 RANKING
+        </div>
+
+        <div id="rankingList"></div>
+
+        <button
+            class="close"
+            onclick="closeModal('rankingModal')">
+            CERRAR
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- PERFIL -->
+
+<div class="modal" id="profileModal">
+
+    <div class="modalBox">
+
+        <div class="modalTitle">
+            👤 PERFIL
+        </div>
+
+        <input
+            class="input"
+            id="nameInput"
+            maxlength="15"
+            placeholder="Nombre de jugador">
+
+        <button
+            class="save"
+            onclick="saveName()">
+            GUARDAR NOMBRE
+        </button>
+
+        <button
+            class="close"
+            onclick="closeModal('profileModal')">
+            CERRAR
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- TIENDA -->
+
+<div class="modal" id="shopModal">
+
+    <div class="modalBox">
+
+        <div class="modalTitle">
+            🛒 TIENDA
+        </div>
+
+        <p class="shopText">
+
+            🐸 Rana verde — GRATIS<br>
+            🐸 Rana azul — próximamente<br>
+            🐸 Rana dorada — próximamente<br>
+            ⚡ Velocidad — próximamente<br>
+            🧲 Imán — próximamente
+
+        </p>
+
+        <button
+            class="close"
+            onclick="closeModal('shopModal')">
+            CERRAR
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- AJUSTES -->
+
+<div class="modal" id="settingsModal">
+
+    <div class="modalBox">
+
+        <div class="modalTitle">
+            ⚙️ AJUSTES
+        </div>
+
+        <p class="shopText">
+
+            🎵 Música<br>
+            🔊 Efectos<br>
+            📳 Vibración
+
+        </p>
+
+        <button
+            class="close"
+            onclick="closeModal('settingsModal')">
+            CERRAR
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- GAME OVER -->
+
+<div id="gameOver">
+
+    <div class="gameOverBox">
+
+        <h1>🐸</h1>
+
+        <h2>
+            ¡FIN DE LA CARRERA!
+        </h2>
+
+        <p>
+            📏 Distancia:
+            <b>
+                <span id="finalDistance">0</span>m
+            </b>
+        </p>
+
+        <p class="finalCoins">
+            🪙 Monedas:
+            <b>
+                <span id="finalCoins">0</span>
+            </b>
+        </p>
+
+
+        <button
+            id="reviveButton"
+            class="bigButton revive"
+            onclick="requestRevive()">
+
+            📺 VER ANUNCIO Y REVIVIR
+
+        </button>
+
+
+        <div id="reviveStatus"></div>
+
+
+        <button
+            class="bigButton"
+            onclick="restart()">
+
+            🔄 VOLVER A JUGAR
+
+        </button>
+
+
+        <button
+            class="bigButton secondary"
+            onclick="returnLobby()">
+
+            🏠 VOLVER AL LOBBY
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<script src="game.js"></script>
+
+</body>
+</html>
